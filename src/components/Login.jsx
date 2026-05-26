@@ -3,8 +3,10 @@ import Header from './Header';
 import { validateUserInput } from '../utils/validations';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../utils/Firebase';
+import { useNavigate } from 'react-router';
 
 const Login = () => {
+    const navigate = useNavigate();
     const [isSignIn, setIsSignIn] = useState(true);
     const [validationError, setValidationError] = useState(false)
     const email = useRef(null);
@@ -26,6 +28,7 @@ const Login = () => {
             createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
                 .then((userCredential) => {
                     const user = userCredential.user;
+                    navigate('/Browse')
                     console.log("#@@@@@@", user);
 
                 })
@@ -42,6 +45,7 @@ const Login = () => {
                     // Signed in 
                     const user = userCredential.user;
                     console.log("Logged in user Details ", user);
+                    navigate('/Browse')
                 })
                 .catch((error) => {
                     const errorCode = error.code;
