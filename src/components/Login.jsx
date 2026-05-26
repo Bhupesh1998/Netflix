@@ -1,23 +1,58 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import Header from './Header';
 import { validateUserInput } from '../utils/validations';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../utils/Firebase';
 
 const Login = () => {
     const [isSignIn, setIsSignIn] = useState(true);
     const [validationError, setValidationError] = useState(false)
     const email = useRef(null);
     const password = useRef(null);
-    
 
-    const handleSignIn = () =>{
+
+    const handleSignIn = () => {
         setIsSignIn(!isSignIn)
     }
 
-    const handleSubmitButton = () =>{
-        
-       const validationresult = validateUserInput(email.current.value,password.current.value);
-       setValidationError(validationresult)
-       
+    const handleSubmitButton = () => {
+
+        const validationresult = validateUserInput(email.current.value, password.current.value);
+        setValidationError(validationresult)
+
+        if (validationresult) return;
+
+        if (!isSignIn) {
+            createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    console.log("#@@@@@@", user);
+
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log(errorCode + " - " + errorMessage);
+
+                });
+        } else {
+            signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+                .then((userCredential) => {
+                    // Signed in 
+                    const user = userCredential.user;
+                    console.log("Logged in user Details ", user);
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.log("@@@@Error", errorCode + " - " + errorMessage);
+
+                });
+
+        }
+
+
+
     }
 
     return (
@@ -38,7 +73,7 @@ const Login = () => {
                     {isSignIn ? "Sign In" : "Sign Up"}
                 </h1>
 
-                <form onSubmit={(e)=> e.preventDefault()} className="flex flex-col gap-3.5">
+                <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3.5">
                     {!isSignIn && <input
                         type="text"
                         className="rounded-md py-2 px-5 border-2 text-sm"
@@ -68,7 +103,7 @@ const Login = () => {
                 <h3 className="mt-6 text-sm text-gray-400">
                     New to Netflix?
                     <span onClick={handleSignIn} className="text-white cursor-pointer ml-1">
-                         {isSignIn ? "Sign In" : "Register Now"}
+                        {isSignIn ? "Sign In" : "Register Now"}
                     </span>
                 </h3>
 
