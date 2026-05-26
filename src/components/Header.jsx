@@ -1,9 +1,9 @@
-import React from 'react';
-import { signOut } from "firebase/auth";
+import React, { useEffect } from 'react';
+import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth } from '../utils/Firebase';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeUser } from '../utils/userSlice';
+import { removeUser, addUser } from '../utils/userSlice';
 
 
 const Header = () => {
@@ -11,14 +11,25 @@ const Header = () => {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+        if (user) {                
+          const {uid, email, displayName, photoURL  } = user
+        dispatch(addUser({uid: uid, email: email, displayName: displayName, photoURL: photoURL }));
+          navigate("/Browse")
+        } else {
+            dispatch(removeUser());
+            navigate("/")
+        }
+      });
+},[])
+
   const handleLoginLogout = () => {
     
     signOut(auth).then(() => {
-      navigate("/");
       dispatch(removeUser())
     }).catch((error) => {
       // An error happened.
-      // navigator("/erorrPage")
     });
     
   }
