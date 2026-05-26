@@ -1,11 +1,23 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import Header from './Header';
+import { validateUserInput } from '../utils/validations';
 
 const Login = () => {
     const [isSignIn, setIsSignIn] = useState(true);
+    const [validationError, setValidationError] = useState(false)
+    const email = useRef(null);
+    const password = useRef(null);
+    
 
     const handleSignIn = () =>{
         setIsSignIn(!isSignIn)
+    }
+
+    const handleSubmitButton = () =>{
+        
+       const validationresult = validateUserInput(email.current.value,password.current.value);
+       setValidationError(validationresult)
+       
     }
 
     return (
@@ -26,7 +38,7 @@ const Login = () => {
                     {isSignIn ? "Sign In" : "Sign Up"}
                 </h1>
 
-                <form className="flex flex-col gap-3.5">
+                <form onSubmit={(e)=> e.preventDefault()} className="flex flex-col gap-3.5">
                     {!isSignIn && <input
                         type="text"
                         className="rounded-md py-2 px-5 border-2 text-sm"
@@ -34,18 +46,21 @@ const Login = () => {
                     />}
                     <input
                         type="text"
+                        ref={email}
                         className="rounded-md py-2 px-5 border-2 text-sm"
                         placeholder="Add username"
                     />
 
                     <input
                         type="password"
+                        ref={password}
                         className="rounded-md py-2 px-5 border-2 text-sm"
                         placeholder="Add Password"
                     />
 
-                    <button className="bg-red-800 rounded-md text-md mt-3.5 py-2">
-                        {/* {Submit} */}
+                    <h1 className='font-bold text-amber-400 py-1.5'>{validationError}</h1>
+
+                    <button onClick={handleSubmitButton} className="bg-red-800 rounded-md text-md mt-3.5 py-2">
                         {isSignIn ? "Submit" : "Register Now"}
                     </button>
                 </form>
