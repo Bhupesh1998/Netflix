@@ -1,16 +1,21 @@
 import React, { useState, useRef } from 'react';
 import Header from './Header';
 import { validateUserInput } from '../utils/validations';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from '../utils/Firebase';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/userSlice';
 
 const Login = () => {
+    
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [isSignIn, setIsSignIn] = useState(true);
     const [validationError, setValidationError] = useState(false)
     const email = useRef(null);
     const password = useRef(null);
+    const name = useRef(null);
 
 
     const handleSignIn = () => {
@@ -28,8 +33,20 @@ const Login = () => {
             createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    navigate('/Browse')
-                    console.log("#@@@@@@", user);
+
+                    updateProfile(auth.currentUser, {
+                        displayName: name.current.value, photoURL: "https://lh3.googleusercontent.com/a/ACg8ocL7jhlkWRFb0zgRCDcr9aNCrTmGAB1UPitVITzUS150iIkPBjgr=s576-c-no"
+                      }).then(() => {
+                        const {displayName,email, photoURL, uid} = auth.currentUser
+                        dispatch(addUser({displayName : displayName,email : email, photoURL : photoURL, uid: uid}))
+                        navigate('/Browse');
+
+                        
+                      }).catch((error) => {
+                        setValidationError("Somethings Error in set image", error)
+                      });
+                    
+                    
 
                 })
                 .catch((error) => {
@@ -42,10 +59,9 @@ const Login = () => {
         } else {
             signInWithEmailAndPassword(auth, email.current.value, password.current.value)
                 .then((userCredential) => {
-                    // Signed in 
-                    const user = userCredential.user;
-                    console.log("Logged in user Details ", user);
-                    navigate('/Browse')
+                    const { uid, email, displayName, photoURL } = userCredential.user;
+                    dispatch(addUser({ uid, email, displayName, photoURL }));
+                    navigate('/Browse');
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -82,6 +98,7 @@ const Login = () => {
                 <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-3.5">
                     {!isSignIn && <input
                         type="text"
+                        ref={name}
                         className="rounded-md py-2 px-5 border-2 text-sm"
                         placeholder="Add your name"
                     />}
