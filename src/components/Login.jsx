@@ -32,6 +32,7 @@ const Login = () => {
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
+                    setValidationError(errorCode + " - " + errorMessage)
                     console.log(errorCode + " - " + errorMessage);
 
                 });
@@ -45,6 +46,7 @@ const Login = () => {
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
+                    setValidationError(errorCode + " - " + errorMessage)
                     console.log("@@@@Error", errorCode + " - " + errorMessage);
 
                 });
