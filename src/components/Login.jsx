@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfi
 import { auth } from '../utils/Firebase';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
+import { BGIMAGE, USER_AVATAR } from '../constants';
 
 const Login = () => {
     
@@ -33,7 +34,7 @@ const Login = () => {
                     const user = userCredential.user;
 
                     updateProfile(auth.currentUser, {
-                        displayName: name.current.value, photoURL: "https://lh3.googleusercontent.com/a/ACg8ocL7jhlkWRFb0zgRCDcr9aNCrTmGAB1UPitVITzUS150iIkPBjgr=s576-c-no"
+                        displayName: name.current.value, photoURL: USER_AVATAR
                       }).then(() => {
                         const {displayName,email, photoURL, uid} = auth.currentUser
                         dispatch(addUser({displayName : displayName,email : email, photoURL : photoURL, uid: uid}))
@@ -79,7 +80,7 @@ const Login = () => {
 
             <div className="absolute inset-0 z-10">
                 <img
-                    src="https://assets.nflxext.com/ffe/siteui/vlv3/435e8bb8-7f1b-49cb-8da8-bff997124294/web/IN-en-20260511-TRIFECTA-perspective_ec39852e-0b48-4e8a-b415-dd8376cd83ce_large.jpg"
+                    src={BGIMAGE}
                     alt="ContentImage"
                     className="h-full w-full object-cover"
                 />

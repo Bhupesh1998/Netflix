@@ -1,11 +1,15 @@
 import React from 'react';
 import Header from './Header';
+import useNowPlayingMovies from '../Hooks/useNowPlayingMovies';
 
 const Browse = () => {
-    return(<div>
-        <Header/>
+    useNowPlayingMovies();
+    
+    return (
+    <div>
+        <Header />
         Browse
-        </div>)
+    </div>)
 }
 
 export default Browse;
