@@ -8,7 +8,7 @@ import { addUser } from '../utils/userSlice';
 import { BGIMAGE, USER_AVATAR } from '../constants';
 
 const Login = () => {
-    
+
     const dispatch = useDispatch();
     const [isSignIn, setIsSignIn] = useState(true);
     const [validationError, setValidationError] = useState(false)
@@ -35,23 +35,22 @@ const Login = () => {
 
                     updateProfile(auth.currentUser, {
                         displayName: name.current.value, photoURL: USER_AVATAR
-                      }).then(() => {
-                        const {displayName,email, photoURL, uid} = auth.currentUser
-                        dispatch(addUser({displayName : displayName,email : email, photoURL : photoURL, uid: uid}))
+                    }).then(() => {
+                        const { displayName, email, photoURL, uid } = auth.currentUser
+                        dispatch(addUser({ displayName: displayName, email: email, photoURL: photoURL, uid: uid }))
 
-                        
-                      }).catch((error) => {
+
+                    }).catch((error) => {
                         setValidationError("Somethings Error in set image", error)
-                      });
-                    
-                    
+                    });
+
+
 
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     setValidationError(errorCode + " - " + errorMessage)
-                    console.log(errorCode + " - " + errorMessage);
 
                 });
         } else {
@@ -64,7 +63,6 @@ const Login = () => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     setValidationError(errorCode + " - " + errorMessage)
-                    console.log("@@@@Error", errorCode + " - " + errorMessage);
 
                 });
 

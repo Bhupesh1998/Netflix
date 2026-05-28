@@ -11,18 +11,17 @@ const Browse = () => {
 
     const movieData = useSelector((store) => store?.movies?.nowPlayingMovies);
     // if(movieData == null) return;
-    if(!movieData) return;
+    if (!movieData) return;
 
     const { original_title, overview, id } = movieData[0];
-    console.log("#####",movieData[0])
 
     return (
-    <div>
-        <Header />
-        <MainContainer title={original_title} overview={overview}/>
-         <VideoBackground MovieId={id} />
-        <SecondaryContainer />
-    </div>)
+        <div>
+            <Header />
+            <MainContainer title={original_title} overview={overview} />
+            <VideoBackground MovieId={id} />
+            <SecondaryContainer />
+        </div>)
 }
 
 export default Browse;
