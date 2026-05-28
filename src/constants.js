@@ -16,3 +16,5 @@ export const options = {
   }
 };
 
+export const CDNImagePath = "https://image.tmdb.org/t/p/w200/"
+

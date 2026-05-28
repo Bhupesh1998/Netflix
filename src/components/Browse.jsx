@@ -17,9 +17,11 @@ const Browse = () => {
 
     return (
         <div>
-            <Header />
-            <MainContainer title={original_title} overview={overview} />
-            <VideoBackground MovieId={id} />
+            <div className="relative h-screen">
+                <Header />
+                <MainContainer title={original_title} overview={overview} />
+                <VideoBackground MovieId={id} />
+            </div>
             <SecondaryContainer />
         </div>)
 }
