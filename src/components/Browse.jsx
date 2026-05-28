@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import useNowPlayingMovies from '../Hooks/useNowPlayingMovies';
+import usePopularMovies from '../Hooks/usePopularMovies';
 import MainContainer from './MainContainer';
 import SecondaryContainer from './SecondaryContainer';
 import { useSelector } from 'react-redux';
@@ -8,6 +9,8 @@ import VideoBackground from './VideoBackground';
 
 const Browse = () => {
     useNowPlayingMovies();
+    usePopularMovies()
+
 
     const movieData = useSelector((store) => store?.movies?.nowPlayingMovies);
     // if(movieData == null) return;

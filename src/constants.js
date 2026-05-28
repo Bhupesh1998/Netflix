@@ -6,6 +6,8 @@ export const USER_AVATAR = "https://lh3.googleusercontent.com/a/ACg8ocL7jhlkWRFb
 
 export const url = 'https://api.themoviedb.org/3/movie/now_playing?&page=1';
 
+export const PopularMoviesURl = "https://api.themoviedb.org/3/movie/popular?&page=1";
+
 export const VideoURL = "https://api.themoviedb.org/3/movie/";
 
 export const options = {
