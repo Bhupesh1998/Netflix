@@ -4,6 +4,7 @@ import useNowPlayingMovies from '../Hooks/useNowPlayingMovies';
 import MainContainer from './MainContainer';
 import SecondaryContainer from './SecondaryContainer';
 import { useSelector } from 'react-redux';
+import VideoBackground from './VideoBackground';
 
 const Browse = () => {
     useNowPlayingMovies();
@@ -12,13 +13,14 @@ const Browse = () => {
     // if(movieData == null) return;
     if(!movieData) return;
 
-    const { original_title, overview} = movieData[0];
+    const { original_title, overview, id } = movieData[0];
     console.log("#####",movieData[0])
 
     return (
     <div>
         <Header />
         <MainContainer title={original_title} overview={overview}/>
+         <VideoBackground MovieId={id} />
         <SecondaryContainer />
     </div>)
 }
