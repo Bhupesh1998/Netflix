@@ -6,10 +6,13 @@ import MainContainer from './MainContainer';
 import SecondaryContainer from './SecondaryContainer';
 import { useSelector } from 'react-redux';
 import VideoBackground from './VideoBackground';
+import GptSearch from './GptSearch';
 
 const Browse = () => {
     useNowPlayingMovies();
-    usePopularMovies()
+    usePopularMovies();
+
+    const isGptEnabled = useSelector((store) => store.gpt.toggelmyGpt);
 
 
     const movieData = useSelector((store) => store?.movies?.nowPlayingMovies);
@@ -22,10 +25,15 @@ const Browse = () => {
         <div>
             <div className="relative h-screen">
                 <Header />
-                <MainContainer title={original_title} overview={overview} />
-                <VideoBackground MovieId={id} />
+                {isGptEnabled ? <GptSearch /> :
+                    <>
+                        <MainContainer title={original_title} overview={overview} />
+                        <VideoBackground MovieId={id} />
+                    </>
+                }
+
             </div>
-            <SecondaryContainer />
+            {!isGptEnabled && <SecondaryContainer />}
         </div>)
 }
 

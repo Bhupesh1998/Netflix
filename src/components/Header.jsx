@@ -5,63 +5,69 @@ import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeUser, addUser } from '../utils/userSlice';
 import { LOGO } from '../constants';
-
+import { toggleGpt } from '../utils/GptSlice';
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
-  useEffect(()=>{
+  const handleGoToGPT = () => {
+    dispatch(toggleGpt());
+  }
+
+  useEffect(() => {
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {                
-          const {uid, email, displayName, photoURL  } = user
-        dispatch(addUser({uid: uid, email: email, displayName: displayName, photoURL: photoURL }));
-          navigate("/Browse")
-        } else {
-            dispatch(removeUser());
-            navigate("/")
-        }
-      });
+      if (user) {
+        const { uid, email, displayName, photoURL } = user
+        dispatch(addUser({ uid: uid, email: email, displayName: displayName, photoURL: photoURL }));
+        navigate("/Browse")
+      } else {
+        dispatch(removeUser());
+        navigate("/")
+      }
+    });
 
-      return () => unsubscribe();
-},[])
+    return () => unsubscribe();
+  }, [])
 
   const handleLoginLogout = () => {
-    
+
     signOut(auth).then(() => {
       dispatch(removeUser())
     }).catch((error) => {
       // An error happened.
     });
-    
-  }
-  
-    return(
 
-      <header className=  {`text-amber-50 flex justify-between px-36  z-50 top-0 left-0 w-full items-center  ${!user ? 'absolute' : ""}`} >
-        <div className='bg-linear-to-b from-black w-1/7'>
-          <img className=' ' src={LOGO} alt="Logo" />
-        </div>
-        <div className='flex gap-5 '>
-          {!user &&  
+  }
+
+  return (
+
+    <header className={`text-amber-50 flex justify-between px-36  z-50 top-0 left-0 w-full items-center  ${!user ? 'absolute' : ""}`} >
+      <div className='bg-linear-to-b from-black w-1/7'>
+        <img className=' ' src={LOGO} alt="Logo" />
+      </div>
+      <div className='flex gap-5 '>
+        {!user &&
           <>
-          <select className="border border-white bg-black text-white rounded-md p-2">
-          <option value="English">English</option>
-          <option value="Hindi">Hindi</option>
-        </select> 
-        </>
+
+            <select className="border border-white bg-black text-white rounded-md p-2">
+              <option value="English">English</option>
+              <option value="Hindi">Hindi</option>
+            </select>
+          </>
         }
 
-          {user?.photoURL && (
-            <img className="w-10 h-10 rounded-md object-cover" src={user.photoURL} alt="Profile" />
-          )}
-          <button onClick={handleLoginLogout} className=' cursor-pointer border-2-red bg-red-900 rounded-md py-1 px-3 mr-3 font-medium'> {!user ? "Sign In" : "Log Out"}</button>
+        {user?.photoURL && (
+          <img className="w-10 h-10 rounded-md object-cover" src={user.photoURL} alt="Profile" />
+        )}
+        <button onClick={handleGoToGPT} className=' cursor-pointer py-3 font-bold rounded-xl bg-violet-600 px-5'>Go GPT</button>
+        <button onClick={handleLoginLogout} className=' cursor-pointer border-2-red bg-red-900 rounded-md py-1 px-3 mr-3 font-medium'> {!user ? "Sign In" : "Log Out"}</button>
 
-        </div>
-      </header>
-    )
+      </div>
+    </header>
+  )
 }
 
 export default Header;
