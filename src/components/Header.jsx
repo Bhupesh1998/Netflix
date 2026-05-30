@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { removeUser, addUser } from '../utils/userSlice';
 import { LOGO } from '../constants';
 import { toggleGpt } from '../utils/GptSlice';
+import LanguageGupport from '../utils/multiLanguage';
+import { SelectedLanguage } from '../utils/AppConfigSlice';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -42,6 +44,10 @@ const Header = () => {
 
   }
 
+  const handleLanguageSelect = (e) => {
+    dispatch(SelectedLanguage(e.target.value));
+  }
+
   return (
 
     <header className={`text-amber-50 flex justify-between px-36  z-50 top-0 left-0 w-full items-center  ${!user ? 'absolute' : ""}`} >
@@ -49,15 +55,14 @@ const Header = () => {
         <img className=' ' src={LOGO} alt="Logo" />
       </div>
       <div className='flex gap-5 '>
-        {!user &&
-          <>
+        {/* {!user && */}
+        <>
 
-            <select className="border border-white bg-black text-white rounded-md p-2">
-              <option value="English">English</option>
-              <option value="Hindi">Hindi</option>
-            </select>
-          </>
-        }
+          <select onClick={handleLanguageSelect} className="border border-white bg-black text-white rounded-md p-2">
+            {LanguageGupport.map((lan) => <option key={lan.laguageValue} value={lan.laguageValue}>{lan.languageOption}</option>)}
+          </select>
+        </>
+        {/* } */}
 
         {user?.photoURL && (
           <img className="w-10 h-10 rounded-md object-cover" src={user.photoURL} alt="Profile" />
@@ -66,7 +71,7 @@ const Header = () => {
         <button onClick={handleLoginLogout} className=' cursor-pointer border-2-red bg-red-900 rounded-md py-1 px-3 mr-3 font-medium'> {!user ? "Sign In" : "Log Out"}</button>
 
       </div>
-    </header>
+    </header >
   )
 }
 
